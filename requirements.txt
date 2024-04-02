@@ -1,5 +1,5 @@
-pdfminer.six
-openai
-docx2txt
-python-dotenv
-werkzeug
+groq
+streamlit
+python-dotenv 
+python-docx
+requests
