@@ -7,7 +7,7 @@ from functions.extract_info import extract_info
 from functions.fetch_data import fetch_data
 from functions.format_response import format_response
 
-st.set_page_config(page_title="BEPC-Resume_Styler", page_icon="static/logo.png", layout='wide')
+st.set_page_config(page_title="BEPC-ResumeStyler", page_icon="static/logo.png", layout='wide')
 
 
 def get_image_base64(image_path):

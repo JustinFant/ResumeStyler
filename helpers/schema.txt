@@ -1,0 +1,18 @@
+{
+  resume: {
+    "candidate_name": "string",
+    "summary": "string (3-5 sentence comprehensive summary of candidate written in first person)"
+    "skills": "array (array of each individual skill listed in candidate's resume under section titled skills, strengths, abilities, etc)",
+    "education": "array" ({
+      "school": "string",
+      "degree": "string",
+      "date": "string (month YYYY)",
+    }),
+    "experience": "array" ({
+      "employer": "string",
+      "job_title": "string",
+      "work_dates": "string (month YYYY - month YYYY)",
+      "responsibilities": "array (only include those listed in the resume)"
+    }),
+  }
+}
