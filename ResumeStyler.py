@@ -28,7 +28,7 @@ st.markdown(
   unsafe_allow_html=True,
 )
 
-candidate_id = st.text_input('Enter the Candidate ID', "298853") # '298853' for testing
+candidate_id = st.text_input('Enter the Candidate ID') # '298853' for testing
 
 
 if st.button('Style Resume', type = 'primary'):
