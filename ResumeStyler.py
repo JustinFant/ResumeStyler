@@ -32,7 +32,7 @@ candidate_id = st.text_input('Enter the Candidate ID') # '298853' for testing
 
 
 if st.button('Style Resume', type = 'primary'):
-  with st.spinner('Evaluating...'):
+  with st.spinner('Styling resume...'):
     start_time = time.time()
     timeout = 10
 
@@ -50,19 +50,20 @@ if st.button('Style Resume', type = 'primary'):
     if not candidate_resume:
       st.error('Timeout while fetching data, please refresh the page and try again.')
 
-    # Send info to Groq to extract
-    response = extract_info(candidate_resume, schema)
+    else:
+      # Send info to Groq to extract
+      response = extract_info(candidate_resume, schema)
 
-    # Convert to JSON
-    response = json.loads(response)
+      # Convert to JSON
+      response = json.loads(response)
 
-    # Convert to docx
-    doc = format_response(response)
+      # Convert to docx
+      doc = format_response(response)
 
-    st.download_button(
-      label="Download Resume",
-      data=doc,
-      file_name=f"{response['resume']['candidate_name']}.docx")
+      st.download_button(
+        label="Download Resume",
+        data=doc,
+        file_name=f"{response['resume']['candidate_name']}.docx")
 
 st.markdown("""
 <footer class="footer mt-auto py-3">
