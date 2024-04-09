@@ -1,8 +1,10 @@
 import streamlit as st
 import os
-import time
 import json
 import base64
+from PyPDF2 import PdfReader
+from io import BytesIO
+from docx import Document
 from functions.extract_info import extract_info
 from functions.fetch_data import fetch_data
 from functions.format_response import format_response
@@ -28,42 +30,39 @@ st.markdown(
   unsafe_allow_html=True,
 )
 
-candidate_id = st.text_input('Enter the Candidate ID') # '298853' for testing
+resume = st.file_uploader('Upload Resume', type=['pdf', 'docx'])
+header = st.checkbox('Include Header?', value=False)
+if header:
+  division = st.selectbox('Select Division', ['US', 'MX'])
+else:
+  division = None
 
-
-if st.button('Style Resume', type = 'primary'):
+if st.button('Style Resume', type = 'primary') and resume is not None:
   with st.spinner('Styling resume...'):
-    start_time = time.time()
-    timeout = 10
-
-    # Fetch Job Description and Candidate Resume
-    candidate_resume = fetch_data(candidate_id)
-
     # Read JSON Schema
     with open('helpers/schema.txt', 'r') as file:
       schema = file.read()
+
+    if resume.name.endswith('.pdf'):
+      reader = PdfReader(resume)
+      content = ''.join([page.extract_text() for page in reader.pages])
+    elif resume.name.endswith('.docx'):
+      doc = Document(BytesIO(resume.read()))
+      content = ' '.join([paragraph.text for paragraph in doc.paragraphs])
+  
+    # Send info to Groq to extract
+    response = extract_info(content, schema)
     
-    # Keep trying to fetch data if invalid, stop after 10 seconds
-    while (not candidate_resume) and time.time() - start_time < timeout:
-      candidate_resume = fetch_data(candidate_id)
-      
-    if not candidate_resume:
-      st.error('Timeout while fetching data, please refresh the page and try again.')
-
-    else:
-      # Send info to Groq to extract
-      response = extract_info(candidate_resume, schema)
-
-      # Convert to JSON
-      response = json.loads(response)
-
-      # Convert to docx
-      doc = format_response(response)
-
-      st.download_button(
-        label="Download Resume",
-        data=doc,
-        file_name=f"{response['resume']['candidate_name']}.docx")
+    # Convert to JSON
+    response = json.loads(response)
+    
+    # Convert to docx
+    doc = format_response(response, header, division)
+    
+    st.download_button(
+      label="Download Resume",
+      data=doc,
+      file_name=f"{response['resume']['candidate_name'].title()}.docx")
 
 st.markdown("""
 <footer class="footer mt-auto py-3">

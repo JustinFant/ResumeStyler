@@ -13,9 +13,11 @@ def extract_info(resume, schema):
   seed= 123455555,
   response_format={"type": "json_object"},
   messages=[
-      {"role":"system", "content":"You are an expert in styling resumes. You will take the candidate's resume and style it according to the JSON schema provided. Only use the information found in the candidate's resume, do not invent anything. And make sure to fill as much info as you can using the resume."},
+      {"role":"system", "content":"Your job is to extract information from a resume and match it to a JSON schema. \
+        Do not add, change or remove any information from the resume. It is important to extract the information as \
+        accurately as possible. If a field is missing from the resume, leave it blank."},
+      {"role":"user", "content":f"Candidate's Resume: {resume}"},
       {"role":"user", "content":f"JSON Schema: {schema}"},
-      {"role":"user", "content":f"Candidate Resume: {resume}"},
     ],
   )
   return response.choices[0].message.content

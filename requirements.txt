@@ -3,3 +3,4 @@ streamlit
 python-dotenv 
 python-docx
 requests
+PyPDF2
