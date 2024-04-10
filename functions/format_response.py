@@ -15,12 +15,10 @@ def format_response(response, header, division):
     section.different_first_page_header_footer = True
     header = section.first_page_header
 
-    # Create a new paragraph in the header
     paragraph = header.paragraphs[0]
     paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     paragraph.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 
-    # Add the picture to the paragraph
     run = paragraph.add_run()
     run.add_picture(f'static/{division}_header.png', width=section.page_width - section.left_margin - section.right_margin)
 
@@ -62,7 +60,7 @@ def format_response(response, header, division):
   else:
     for skill in response['resume']['skills']:
       skills_paragraph = doc.add_paragraph(style='List Bullet')
-      skills_run = skills_paragraph.add_run(skill)
+      skills_run = skills_paragraph.add_run(skill.title())
       skills_run.font.name = 'Segoe UI'
 
   doc.add_paragraph()

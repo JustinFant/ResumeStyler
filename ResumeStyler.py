@@ -45,13 +45,13 @@ if st.button('Style Resume', type = 'primary') and resume is not None:
 
     if resume.name.endswith('.pdf'):
       reader = PdfReader(resume)
-      content = ''.join([page.extract_text() for page in reader.pages])
+      resume = ''.join([page.extract_text() for page in reader.pages])
     elif resume.name.endswith('.docx'):
       doc = Document(BytesIO(resume.read()))
-      content = ' '.join([paragraph.text for paragraph in doc.paragraphs])
+      resume = ' '.join([paragraph.text for paragraph in doc.paragraphs])
   
     # Send info to Groq to extract
-    response = extract_info(content, schema)
+    response = extract_info(resume, schema)
     
     # Convert to JSON
     response = json.loads(response)
