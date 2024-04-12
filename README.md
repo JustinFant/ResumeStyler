@@ -31,6 +31,7 @@ Provides a simple and intuitive user interface with a professional look.
 ## Note
 
 The app will delete the uploaded audio file after it is processed to prevent storage of unnecessary files.
+This branch (JFv2) is using Groq API, and is the current live version as of 4/11/24.
 
 ## Author
 
