@@ -49,20 +49,23 @@ if st.button('Style Resume', type = 'primary') and resume is not None:
     elif resume.name.endswith('.docx'):
       doc = Document(BytesIO(resume.read()))
       resume = ' '.join([paragraph.text for paragraph in doc.paragraphs])
-  
-    # Send info to Groq to extract
-    response = extract_info(resume, schema)
-    
-    # Convert to JSON
-    response = json.loads(response)
-    
-    # Convert to docx
-    doc = format_response(response, header, division)
-    
-    st.download_button(
-      label="Download Resume",
-      data=doc,
-      file_name=f"{response['resume']['candidate_name'].title()}.docx")
+
+    if resume != "":
+      # Send info to Groq to extract
+      response = extract_info(resume, schema)
+      
+      # Convert to JSON
+      response = json.loads(response)
+      
+      # Convert to docx
+      doc = format_response(response, header, division)
+      
+      st.download_button(
+        label="Download Resume",
+        data=doc,
+        file_name=f"{response['resume']['candidate_name'].title()}.docx")
+    else:
+      st.error("No text found in the resume. Please upload a .pdf or .docx file.")
 
 st.markdown("""
 <footer class="footer mt-auto py-3">
