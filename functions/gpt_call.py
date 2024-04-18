@@ -1,14 +1,14 @@
-from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv 
 
 
 load_dotenv()
-client = Groq()
+client = OpenAI()
 
 
-def extract_info(resume, schema):
+def gpt_call(resume, schema):
   response = client.chat.completions.create(
-  model="mixtral-8x7b-32768",
+  model="gpt-4-turbo",
   temperature=0,  
   seed= 123455555,
   response_format={"type": "json_object"},

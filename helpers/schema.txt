@@ -1,18 +1,9 @@
 {
-  resume: {
+  "resume": {
     "candidate_name": "string",
-    "summary": "string (3-5 sentence comprehensive summary of candidate written in first person, if one is not provided, write one)"
+    "summary": "string (3-5 sentence comprehensive summary of candidate written in first person, if one is not provided, write one)",
     "skills": "array (array of each individual skill listed in candidate's resume under section titled skills, strengths, abilities, etc)",
-    "education": "array" ({
-      "school": "string (if high school make sure to list high school diploma in the degree)",
-      "degree": "string",
-      "date": "string (month YYYY)",
-    }),
-    "experience": "array" (most recent at the start {
-      "employer": "string",
-      "job_title": "string",
-      "work_dates": "string (month YYYY - month YYYY)",
-      "responsibilities": "array (array of each individual responsibility listed in candidate's resume under section specific to a job !!! NOT THE SAME AS THE SKILLS SECTION !!!)"
-    }),
+    "education": "array of objects with fields: school (string, if high school make sure to list high school diploma in the degree), degree (string), date (string, format: month YYYY)",
+    "experience": "array of objects with fields: employer (string), job_title (string), work_dates (string, format: month YYYY - month YYYY), responsibilities (array of each individual responsibility listed in candidate's resume under section specific to a job !!! NOT THE SAME AS THE SKILLS SECTION !!!)"
   }
 }

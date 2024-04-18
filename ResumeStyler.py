@@ -2,27 +2,30 @@ import streamlit as st
 import os
 import json
 import base64
+import time
 from PyPDF2 import PdfReader
 from io import BytesIO
 from docx import Document
-from functions.extract_info import extract_info
-from functions.fetch_data import fetch_data
+from functions.groq_call import groq_call
+from functions.gpt_call import gpt_call
 from functions.format_response import format_response
 
 st.set_page_config(page_title="BEPC-ResumeStyler", page_icon="static/logo.png", layout='wide')
 
+# Timer to track seconds spent in each function, set to True to enable
+DEBUG_TIMER = False
 
 def get_image_base64(image_path):
   with open(image_path, 'rb') as img_file:
     return base64.b64encode(img_file.read()).decode('utf-8')
 
-sr2new = get_image_base64('static/rs2.png')
+sr2new = get_image_base64('static/RS_2.png')
 
 st.markdown(
   f"""
   <div class="container">
       <h2 class="text-center mt-4">
-          <img src="data:image/png;base64,{sr2new}" width="75" height="75" class="d-inline-block align-top" alt="">
+          <img src="data:image/png;base64,{sr2new}" width="125" height="125" class="d-inline-block align-top" alt="">
           Resume Styler <span style="font-style: italic; font-size: 17px;">for recruiting V2.0</span>
       </h2>
   </div>
@@ -30,6 +33,7 @@ st.markdown(
   unsafe_allow_html=True,
 )
 
+model = st.selectbox('Select Model', ['Groq', 'Chat GPT'])
 resume = st.file_uploader('Upload Resume', type=['pdf', 'docx'])
 header = st.checkbox('Include Header?', value=False)
 if header:
@@ -51,14 +55,42 @@ if st.button('Style Resume', type = 'primary') and resume is not None:
       resume = ' '.join([paragraph.text for paragraph in doc.paragraphs])
 
     if resume != "":
-      # Send info to Groq to extract
-      response = extract_info(resume, schema)
+      
+      if model == 'Groq':
+        if DEBUG_TIMER:
+          # Start timer before groq call
+          start_time = time.time()
+        
+        response = groq_call(resume, schema)
+        
+        if DEBUG_TIMER:
+          # Print time spent in groq call
+          print(f"Time in groq call: {time.time() - start_time} seconds")
+      else:
+        
+        if DEBUG_TIMER:
+          # Start timer before gpt call
+          start_time = time.time()
+        
+        response = gpt_call(resume, schema)
+        
+        if DEBUG_TIMER:
+          # Print time spent in gpt call
+          print(f"Time in gpt call: {time.time() - start_time} seconds")
       
       # Convert to JSON
       response = json.loads(response)
       
+      if DEBUG_TIMER:
+        # Start timer before format response
+        start_time = time.time()
+      
       # Convert to docx
       doc = format_response(response, header, division)
+
+      if DEBUG_TIMER:
+        # Print time spent in format response
+        print(f"Time in format response: {time.time() - start_time} seconds")
       
       st.download_button(
         label="Download Resume",
