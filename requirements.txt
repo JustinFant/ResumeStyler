@@ -1,4 +1,5 @@
 groq
+openai
 streamlit
 python-dotenv 
 python-docx
