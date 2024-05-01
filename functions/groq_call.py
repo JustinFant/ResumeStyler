@@ -20,4 +20,5 @@ def groq_call(resume, schema):
       {"role":"user", "content":f"JSON Schema: {schema}"},
     ],
   )
+  # print(response.choices[0].message.content)
   return response.choices[0].message.content

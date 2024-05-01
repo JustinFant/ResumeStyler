@@ -8,7 +8,7 @@ client = OpenAI()
 
 def gpt_call(resume, schema):
   response = client.chat.completions.create(
-  model="gpt-4-turbo",
+  model="gpt-3.5-turbo-0125",
   temperature=0,  
   seed= 123455555,
   response_format={"type": "json_object"},
@@ -20,4 +20,5 @@ def gpt_call(resume, schema):
       {"role":"user", "content":f"JSON Schema: {schema}"},
     ],
   )
+  # print(response.choices[0].message.content)
   return response.choices[0].message.content
